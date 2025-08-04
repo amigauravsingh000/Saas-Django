@@ -1,1 +1,5 @@
 Django>=5.0,<5.1
+dj-database-url
+whitenoise
+gunicorn
+psycopg2-binary

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: django-app
+    env: docker
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    plan: free
+    branch: main
+    envVars:
+      - key: SECRET_KEY
+        value: your-production-secret
+      - key: DEBUG
+        value: false
