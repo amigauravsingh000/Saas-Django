@@ -5,15 +5,18 @@ Django settings for cfehome project (Render Ready & Local Dev Compatible)
 import os
 from pathlib import Path
 import dj_database_url  # pip install dj-database-url
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ✅ Load environment variables
-SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-default-secret-key")
+# SECRET_KEY = os.environ.get("SECRET_KEY", "unsafe-default-secret-key")
+SECRET_KEY = config("DJANGO_SECRET_KEY", default = "unsafe-default-secret-key")
 
 # ✅ Default DEBUG=True for local dev unless explicitly set to False
-DEBUG = os.environ.get("DEBUG", "True") == "True"
-
+# DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = config("DJANGO_DEBUG", cast=bool)
+print("DEBUG", DEBUG, type(DEBUG))
 # ✅ Allowed Hosts
 ALLOWED_HOSTS = [".onrender.com"]
 if DEBUG:
