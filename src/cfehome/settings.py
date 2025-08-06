@@ -23,15 +23,18 @@ if DEBUG:
     ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
 
 # ✅ Database configuration
-DATABASE_URL = os.environ.get("DATABASE_URL")
+# DATABASE_URL = os.environ.get("DATABASE_URL")
+CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default = 30)
+DATABASE_URL = config("DATABASE_URL", cast=str)
 
-if DATABASE_URL and DATABASE_URL.startswith("postgres"):
+if DATABASE_URL is not None:
     # ✅ Render PostgreSQL with SSL
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=600,
-            ssl_require=True
+            conn_health_checks=True,
+            conn_max_age=CONN_MAX_AGE,
+            # ssl_require=True
         )
     }
 else:
