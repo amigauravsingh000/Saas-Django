@@ -25,6 +25,7 @@ COPY ./src /app
 
 # Entry script: runs migrations & starts Gunicorn server
 RUN python manage.py vendor_pull
+RUN python manage.py collectstatic --noinput
 RUN echo '#!/bin/bash\npython manage.py migrate --noinput\ngunicorn cfehome.wsgi:application --bind 0.0.0.0:$PORT' > /start.sh \
     && chmod +x /start.sh
 
