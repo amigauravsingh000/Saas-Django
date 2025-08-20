@@ -23,10 +23,12 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy Django project
 COPY ./src /app
 
-# Entry script: runs migrations & starts Gunicorn server
-RUN python manage.py vendor_pull
-RUN python manage.py collectstatic --noinput
-RUN echo '#!/bin/bash\npython manage.py migrate --noinput\ngunicorn cfehome.wsgi:application --bind 0.0.0.0:$PORT' > /start.sh \
+# Startup script: migrations + collectstatic + custom commands + gunicorn
+RUN echo '#!/bin/bash\n\
+python manage.py migrate --noinput\n\
+python manage.py collectstatic --noinput\n\
+python manage.py vendor_pull\n\
+gunicorn cfehome.wsgi:application --bind 0.0.0.0:$PORT' > /start.sh \
     && chmod +x /start.sh
 
 CMD ["/start.sh"]
